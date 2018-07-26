@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>index</title>
+	<meta charset="UTF-8">
+	<style>
+		svg {
+			width:500px;
+			height:500px;
+			display:block;
+			margin:auto;
+			fill:gray;
+		}
+		circle {
+			stroke-width:1;
+			stroke:white;
+		}
+	</style>
+	<script src="scores.js"></script>
+	<script src="svg.js"></script>
+</head>
+<body>
+	<svg id='scatterplot_1'></svg>
+	<svg id='scatterplot_2'></svg>
+	<svg id='scatterplot_3'></svg>
+
+
+</body>
+<script>
+		var svgSize = 500;
+		var minO = 0, maxO = 0, minT = 0, maxT = 0;
+		var svg1 = document.getElementById('scatterplot_1');
+		var svg2 = document.getElementById('scatterplot_2');
+		var svg3 = document.getElementById('scatterplot_3');
+
+		processPlot1();
+		function processPlot1() {
+			for (var i = 0; i < scores.length; i++) {
+				var satm = scores[i].SATM;
+				var satv = scores[i].SATV;
+				var sum = satm+satv;
+				var act = scores[i].ACT;
+				var gpa = scores[i].GPA;
+				// ---------------- vis 1 ---------------------
+				scale(300,800,0,490);
+				var x = convert(satm);
+				var y = svgSize - convert(satv);
+				scale(1,36,0,9);
+				var radius = convert(act);
+				scale(0,4,0,1); 
+				var col = convert(gpa); 
+				var color = rgb(0,col,0);
+				var elem = createElem(x,y,radius,color);
+				svg1.appendChild(elem);
+				// ---------------- vis 2 ----------------------
+				scale(14,36,0,490);
+				x = convert(act);
+				scale(0,4,0,490);
+				y = svgSize - convert(gpa);
+				scale(300,800,0,9);
+				radius = convert(satm);
+				scale(300,800,0,1);
+				col = convert(satv);
+				color = rgb(col,0,0);
+				elem = createElem(x,y,radius,color);
+				svg2.appendChild(elem);
+				// --------------- vis 3 -----------------------
+				scale(600,1600,0,490);
+				x = convert(sum);
+				scale(0,4,0,490);
+				y = svgSize - convert(gpa);
+				scale(1,36,0,1);
+				col = convert(act);
+				color = rgb(0,0,col);
+				elem = createElem(x,y,7,color);
+				svg3.appendChild(elem);
+			}
+		} //processPlot1
+		function processPlot2() {}
+
+
+
+
+
+
+		function iterateScores() {
+			for (var i = 0; i < scores.length; i++) {
+				var satm = scores[i].SATM;
+				var satv = scores[i].SATV;
+				var act = scores[i].ACT;
+				var gpa = scores[i].GPA;
+			}
+		} // iterateScores
+
+		function scale(a,b,c,d) {
+			minO = a;
+			maxO = b;
+			minT = c;
+			maxT = d;
+		} // scale
+
+		function convert(x) {
+			return ((x-minO)/(maxO-minO))*(maxT-minT)+minT;
+		}
+		function createElem(x,y,radius,color) {
+			var shape = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+			shape.setAttributeNS(null,"cx",x);
+			shape.setAttributeNS(null,"cy",y);
+			shape.setAttributeNS(null,"r",radius);
+			shape.setAttributeNS(null,"fill",color);
+			return shape;
+		} // createElem
+
+	</script>
+</html>
